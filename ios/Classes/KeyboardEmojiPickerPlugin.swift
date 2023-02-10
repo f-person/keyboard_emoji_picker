@@ -15,10 +15,6 @@ public class KeyboardEmojiPickerPlugin: NSObject, FlutterPlugin {
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        print(call)
-        
-        KeyboardEmojiPickerPlugin.channel?.invokeMethod("openingKeyboardFailed", arguments: ["failure": "noEmojiKeyboard"])
-        
         let modes = UITextInputMode.activeInputModes
         let hasEmojiKeyboard = modes.contains(where: { $0.primaryLanguage == "emoji" })
         print(hasEmojiKeyboard)
