@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - keyboard_emoji_picker (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - keyboard_emoji_picker (from `.symlinks/plugins/keyboard_emoji_picker/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  keyboard_emoji_picker:
+    :path: ".symlinks/plugins/keyboard_emoji_picker/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  keyboard_emoji_picker: efd8498af617ba0d1c5329406a0a8e5c7dd50b46
+
+PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+
+COCOAPODS: 1.11.3
