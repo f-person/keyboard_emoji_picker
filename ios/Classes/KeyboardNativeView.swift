@@ -1,5 +1,5 @@
 //
-//  FLNativeView.swift
+//  KeyboardNativeView.swift
 //  keyboard_emoji_picker
 //
 //  Created by arshak ‎ on 10.02.23.
@@ -8,7 +8,7 @@
 import Flutter
 import UIKit
 
-class FLNativeViewFactory: NSObject, FlutterPlatformViewFactory {
+class KeyboardNativeViewFactory: NSObject, FlutterPlatformViewFactory {
     private var messenger: FlutterBinaryMessenger
     
     init(messenger: FlutterBinaryMessenger) {
@@ -21,7 +21,7 @@ class FLNativeViewFactory: NSObject, FlutterPlatformViewFactory {
         viewIdentifier viewId: Int64,
         arguments args: Any?
     ) -> FlutterPlatformView {
-        return FLNativeView(
+        return KeyboardNativeView(
             frame: frame,
             viewIdentifier: viewId,
             arguments: args,
@@ -29,8 +29,8 @@ class FLNativeViewFactory: NSObject, FlutterPlatformViewFactory {
     }
 }
 
-class FLNativeView: NSObject, FlutterPlatformView {
-    public static var button = TestButton()
+class KeyboardNativeView: NSObject, FlutterPlatformView {
+    public static var inputView = EmojiChooserInput()
     
     init(
         frame: CGRect,
@@ -38,40 +38,27 @@ class FLNativeView: NSObject, FlutterPlatformView {
         arguments args: Any?,
         binaryMessenger messenger: FlutterBinaryMessenger?
     ) {
+        KeyboardNativeView.inputView.frame = CGRectZero
+        
         super.init()
     }
     
     func view() -> UIView {
-        return createNativeView()
-        //        return _view
-    }
-    
-    func createNativeView() -> UIView {
-        return FLNativeView.button
+        return KeyboardNativeView.inputView
     }
 }
 
-class TestButton: UIButton, UIKeyInput {
+final class EmojiChooserInput: UITextView {
+    override var textInputContextIdentifier: String? { "" }
     
-    var hasText: Bool = true
-    
-    override var textInputContextIdentifier: String? { "" } // return non-nil to show the Emoji keyboard ¯\_(ツ)_/¯
-    
-    func insertText(_ text: String) {
+    override func insertText(_ text: String) {
         print("\(text)")
         
         if (text.containsEmoji) {
             KeyboardEmojiPickerPlugin.channel?.invokeMethod("emojiPicked", arguments: ["emoji": text])
             resignFirstResponder()
         }
-        
     }
-    
-    func deleteBackward() {}
-    
-    override var canBecomeFirstResponder: Bool { return true }
-    
-    override var canResignFirstResponder: Bool { return true }
     
     override var textInputMode: UITextInputMode? {
         for mode in UITextInputMode.activeInputModes {
@@ -83,6 +70,7 @@ class TestButton: UIButton, UIKeyInput {
         return nil
     }
 }
+
 
 extension Character {
     /// A simple emoji is one scalar and presented to the user as an Emoji

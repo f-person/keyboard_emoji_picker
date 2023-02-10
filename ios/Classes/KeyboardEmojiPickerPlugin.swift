@@ -10,21 +10,33 @@ public class KeyboardEmojiPickerPlugin: NSObject, FlutterPlugin {
         let instance = KeyboardEmojiPickerPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel!)
         
-        let factory = FLNativeViewFactory(messenger: registrar.messenger())
+        let factory = KeyboardNativeViewFactory(messenger: registrar.messenger())
         registrar.register(factory, withId: "fperson.dev/keyboard_emoji_picker")
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch (call.method) {
+        case "pickEmoji":
+            if (checkHasEmojiKeyboard()) {
+                KeyboardNativeView.inputView.becomeFirstResponder()
+            } else {
+                KeyboardEmojiPickerPlugin.channel?.invokeMethod("openingKeyboardFailed", arguments: ["failure": "noEmojiKeyboard"])
+            }
+        case "hasEmojiKeyboard":
+            let hasEmojiKeyboard = checkHasEmojiKeyboard()
+            result(hasEmojiKeyboard)
+        case "closeEmojiKeyboard":
+            KeyboardNativeView.inputView.resignFirstResponder()
+        default:
+            KeyboardEmojiPickerPlugin.channel?.invokeMethod("unknownMethod", arguments: ["methodName": call.method])
+        }
+    }
+    
+    private func checkHasEmojiKeyboard() -> Bool {
         let modes = UITextInputMode.activeInputModes
         let hasEmojiKeyboard = modes.contains(where: { $0.primaryLanguage == "emoji" })
-        print(hasEmojiKeyboard)
-        print("hasEmojiKeyboard")
         
-        if (hasEmojiKeyboard) {
-            FLNativeView.button.becomeFirstResponder()
-        } else {
-            KeyboardEmojiPickerPlugin.channel?.invokeMethod("openingKeyboardFailed", arguments: ["failure": "noEmojiKeyboard"])
-        }
+        return hasEmojiKeyboard
     }
 }
 

@@ -12,18 +12,11 @@ class KeyboardEmojiPickerWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SizedBox.shrink(
-          child: UiKitView(
-            viewType: _viewType,
-            onPlatformViewCreated: _onPlatformViewCreated,
-          ),
+        const SizedBox.shrink(
+          child: UiKitView(viewType: _viewType),
         ),
         child,
       ],
     );
-  }
-
-  void _onPlatformViewCreated(int id) {
-    print('Platform view created! Can use now!');
   }
 }

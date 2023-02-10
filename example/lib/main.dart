@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:keyboard_emoji_picker/keyboard_emoji_picker.dart';
 
 void main() {
@@ -16,28 +13,51 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String? _selectedEmoji;
+  bool _hasKeyboard = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkHasEmojiKeyboard();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Emoji Picker Example'),
         ),
         body: Center(
           child: Column(children: [
+            const SizedBox(height: 16),
+            Text(
+              _selectedEmoji ??
+                  'No emoji selected yet.\nPress the button below to pick one!',
+              style: TextStyle(
+                fontSize: _selectedEmoji == null ? 16 : 64,
+              ),
+              textAlign: TextAlign.center,
+            ),
             TextButton(
               onPressed: () async {
+                KeyboardEmojiPickerController.pickEmoji();
                 final emoji = await KeyboardEmojiPickerController.pickEmoji();
-                print('picked emoji: $emoji');
+                setState(() {
+                  if (emoji != null) {
+                    _selectedEmoji = emoji;
+                  }
+                });
               },
-              child: const Text('Open'),
+              child: const Text('Pick an emoji from the keyboard!'),
             ),
-            TextButton(
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-              child: const Text('Close'),
+            const TextButton(
+              onPressed: KeyboardEmojiPickerController.closeEmojiKeyboard,
+              child: Text('Close'),
             ),
+            const SizedBox(height: 16),
+            Text('Has emoji keyboard: $_hasKeyboard'),
             const KeyboardEmojiPickerWrapper(
               child: SizedBox(),
             ),
@@ -45,5 +65,13 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  void _checkHasEmojiKeyboard() async {
+    final hasKeyboard =
+        await KeyboardEmojiPickerController.checkHasEmojiKeyboard();
+    setState(() {
+      _hasKeyboard = hasKeyboard;
+    });
   }
 }

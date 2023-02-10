@@ -8,28 +8,36 @@ class KeyboardEmojiPickerController {
   /// The method channel used to interact with the native platform.
   static const _methodChannel = MethodChannel('keyboard_emoji_picker');
 
-  static Future<String> pickEmoji() async {
-    final completer = Completer<String>();
+  static Future<String?> pickEmoji() async {
+    final completer = Completer<String?>();
 
     _methodChannel.invokeMethod('pickEmoji');
     _methodChannel.setMethodCallHandler((call) async {
-      final didPickEmoji = call.method == 'emojiPicked';
-      if (didPickEmoji) {
-        completer.complete(call.arguments['emoji']);
-      }
-
-      final isFailure = call.method == 'openingKeyboardFailed';
-      if (isFailure) {
-        final failure = call.arguments['failure'];
-        if (failure == 'noEmojiKeyboard') {
-          completer.completeError(const NoEmojiKeyboardFound());
-        } else {
-          completer.completeError(const UnknownError());
-        }
+      switch (call.method) {
+        case 'emojiPicked':
+          return completer.complete(call.arguments['emoji']);
+        case 'emojiPickerClosed':
+          return completer.complete(null);
+        case 'openingKeyboardFailed':
+          final failure = call.arguments['failure'];
+          if (failure == 'noEmojiKeyboard') {
+            return completer.completeError(const NoEmojiKeyboardFound());
+          } else {
+            return completer.completeError(const UnknownError());
+          }
       }
     });
 
     return completer.future;
+  }
+
+  static Future<bool> checkHasEmojiKeyboard() async {
+    final result = await _methodChannel.invokeMethod<bool>('hasEmojiKeyboard');
+    return result ?? false;
+  }
+
+  static void closeEmojiKeyboard() {
+    _methodChannel.invokeMethod('closeEmojiKeyboard');
   }
 }
 
