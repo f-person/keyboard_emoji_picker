@@ -6,13 +6,13 @@ export 'src/keyboard_emoji_picker_wrapper.dart';
 
 class KeyboardEmojiPickerController {
   /// The method channel used to interact with the native platform.
-  final methodChannel = const MethodChannel('keyboard_emoji_picker');
+  static const _methodChannel = MethodChannel('keyboard_emoji_picker');
 
-  Future<String> pickEmoji() async {
+  static Future<String> pickEmoji() async {
     final completer = Completer<String>();
 
-    methodChannel.invokeMethod('pickEmoji');
-    methodChannel.setMethodCallHandler((call) async {
+    _methodChannel.invokeMethod('pickEmoji');
+    _methodChannel.setMethodCallHandler((call) async {
       final didPickEmoji = call.method == 'emojiPicked';
       if (didPickEmoji) {
         completer.complete(call.arguments['emoji']);

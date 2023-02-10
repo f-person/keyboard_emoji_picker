@@ -16,13 +16,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _keyboardEmojiPickerPlugin = KeyboardEmojiPickerController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,7 +27,7 @@ class _MyAppState extends State<MyApp> {
           child: Column(children: [
             TextButton(
               onPressed: () async {
-                final emoji = await _keyboardEmojiPickerPlugin.pickEmoji();
+                final emoji = await KeyboardEmojiPickerController.pickEmoji();
                 print('picked emoji: $emoji');
               },
               child: const Text('Open'),
