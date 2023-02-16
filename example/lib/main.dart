@@ -42,8 +42,9 @@ class _MyAppState extends State<MyApp> {
             ),
             TextButton(
               onPressed: () async {
-                KeyboardEmojiPickerController.pickEmoji();
-                final emoji = await KeyboardEmojiPickerController.pickEmoji();
+                KeyboardEmojiPicker().pickEmoji();
+                final emoji = await KeyboardEmojiPicker().pickEmoji();
+                print('Picked emoji: $emoji');
                 setState(() {
                   if (emoji != null) {
                     _selectedEmoji = emoji;
@@ -52,9 +53,9 @@ class _MyAppState extends State<MyApp> {
               },
               child: const Text('Pick an emoji from the keyboard!'),
             ),
-            const TextButton(
-              onPressed: KeyboardEmojiPickerController.closeEmojiKeyboard,
-              child: Text('Close'),
+            TextButton(
+              onPressed: KeyboardEmojiPicker().closeEmojiKeyboard,
+              child: const Text('Close'),
             ),
             const SizedBox(height: 16),
             Text('Has emoji keyboard: $_hasKeyboard'),
@@ -68,8 +69,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _checkHasEmojiKeyboard() async {
-    final hasKeyboard =
-        await KeyboardEmojiPickerController.checkHasEmojiKeyboard();
+    final hasKeyboard = await KeyboardEmojiPicker().checkHasEmojiKeyboard();
     setState(() {
       _hasKeyboard = hasKeyboard;
     });
