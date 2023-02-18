@@ -1,6 +1,30 @@
 import 'package:keyboard_emoji_picker/src/keyboard_emoji_picker_impl/keyboard_emoji_picker_impl.dart';
 
-// TODO(f-person): Add documentation with examples.
+/// `KeyboardEmojiPicker` is a class that lets you to pick an emoji
+/// using the device's native emoji keyboard.
+///
+/// It is required to have [KeyboardEmojiPickerWrapper] somewhere in your widget tree.
+/// Otherwise, the plugin will not work.
+///
+/// Since sometimes the emoji keyboard is not available, it is recommended
+/// to check if the device has an emoji keyboard before trying to pick an emoji
+/// via [checkHasEmojiKeyboard].
+/// Otherwise, [pickEmoji] will throw a [NoEmojiKeyboardFound] error:
+///
+/// ```dart
+/// final hasEmojiKeyboard = await KeyboardEmojiPicker.instance.checkHasEmojiKeyboard();
+///
+/// if (hasEmojiKeyboard) {
+///   final emoji = await KeyboardEmojiPicker.instance.pickEmoji();
+///   if (emoji != null) {
+///     // Do something with the emoji
+///   } else {
+///     // The emoji picking process was cancelled.
+///   }
+/// } else {
+///   // Show a custom emoji picker (e. g. made in Flutter)
+/// }
+/// ```
 abstract class KeyboardEmojiPicker {
   /// A shortcut to the default singleton instance of [KeyboardEmojiPicker].
   factory KeyboardEmojiPicker() => _instance;
