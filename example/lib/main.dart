@@ -42,9 +42,7 @@ class _MyAppState extends State<MyApp> {
             ),
             TextButton(
               onPressed: () async {
-                KeyboardEmojiPicker().pickEmoji();
                 final emoji = await KeyboardEmojiPicker().pickEmoji();
-                print('Picked emoji: $emoji');
                 setState(() {
                   if (emoji != null) {
                     _selectedEmoji = emoji;
@@ -61,6 +59,15 @@ class _MyAppState extends State<MyApp> {
             Text('Has emoji keyboard: $_hasKeyboard'),
             const KeyboardEmojiPickerWrapper(
               child: SizedBox(),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Click me to lose focus',
+                ),
+              ),
             ),
           ]),
         ),

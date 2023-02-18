@@ -27,6 +27,7 @@ public class KeyboardEmojiPickerPlugin: NSObject, FlutterPlugin {
             result(hasEmojiKeyboard)
         case "closeEmojiKeyboard":
             KeyboardNativeView.inputView.resignFirstResponder()
+            result(nil)
         default:
             KeyboardEmojiPickerPlugin.channel?.invokeMethod("unknownMethod", arguments: ["methodName": call.method])
         }

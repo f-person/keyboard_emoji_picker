@@ -49,6 +49,8 @@ class KeyboardNativeView: NSObject, FlutterPlatformView {
 }
 
 final class EmojiChooserInput: UITextView {
+    private static var isPickingEmoji = false
+    
     override var textInputContextIdentifier: String? { "" }
     
     override func insertText(_ text: String) {
@@ -56,6 +58,7 @@ final class EmojiChooserInput: UITextView {
         
         if (text.containsEmoji) {
             KeyboardEmojiPickerPlugin.channel?.invokeMethod("emojiPicked", arguments: ["emoji": text])
+            EmojiChooserInput.isPickingEmoji = false
             resignFirstResponder()
         }
     }
@@ -68,6 +71,21 @@ final class EmojiChooserInput: UITextView {
         }
         
         return nil
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        EmojiChooserInput.isPickingEmoji = true
+        
+        return super.becomeFirstResponder()
+    }
+    
+    override func resignFirstResponder() -> Bool {
+        if (EmojiChooserInput.isPickingEmoji) {
+            KeyboardEmojiPickerPlugin.channel?.invokeMethod("emojiPicked", arguments: ["emoji": nil])
+            EmojiChooserInput.isPickingEmoji = false
+        }
+        
+        return super.resignFirstResponder()
     }
 }
 

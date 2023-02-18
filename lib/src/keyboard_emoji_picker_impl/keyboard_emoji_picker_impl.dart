@@ -28,8 +28,8 @@ class KeyboardEmojiPickerImpl implements KeyboardEmojiPicker {
   }
 
   @override
-  Future<void> closeEmojiKeyboard() {
-    return _methodChannel.invokeMethod<void>('closeEmojiKeyboard');
+  Future<void> closeEmojiKeyboard() async {
+    await _methodChannel.invokeMethod<void>('closeEmojiKeyboard');
   }
 
   Future<dynamic> Function(MethodCall call)? _createMethodCallHandler(
