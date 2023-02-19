@@ -59,7 +59,13 @@ final class EmojiChooserInput: UITextView {
         if (text.containsEmoji) {
             KeyboardEmojiPickerPlugin.channel?.invokeMethod("emojiPicked", arguments: ["emoji": text])
             EmojiChooserInput.isPickingEmoji = false
-            resignFirstResponder()
+            unFocus()
+        } else {
+            EmojiChooserInput.isPickingEmoji = false
+            unFocus()
+            
+            EmojiChooserInput.isPickingEmoji = true
+            focus()
         }
     }
     
@@ -77,6 +83,15 @@ final class EmojiChooserInput: UITextView {
         EmojiChooserInput.isPickingEmoji = true
         
         return super.becomeFirstResponder()
+    }
+    
+    /// A handy shortcut to avoid Xcode warnings
+    public func focus() {
+        let _ = becomeFirstResponder()
+    }
+    
+    public func unFocus() {
+        let _ = resignFirstResponder()
     }
     
     override func resignFirstResponder() -> Bool {
