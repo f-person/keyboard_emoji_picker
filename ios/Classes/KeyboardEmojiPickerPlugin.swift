@@ -18,7 +18,9 @@ public class KeyboardEmojiPickerPlugin: NSObject, FlutterPlugin {
         switch (call.method) {
         case "pickEmoji":
             if (checkHasEmojiKeyboard()) {
-                KeyboardNativeView.inputView.focus()
+                DispatchQueue.main.async {
+                    KeyboardNativeView.inputView.focus()
+                }
             } else {
                 KeyboardEmojiPickerPlugin.channel?.invokeMethod("openingKeyboardFailed", arguments: ["failure": "noEmojiKeyboard"])
             }

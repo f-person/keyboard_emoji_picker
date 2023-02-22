@@ -61,11 +61,13 @@ final class EmojiChooserInput: UITextView {
             EmojiChooserInput.isPickingEmoji = false
             unFocus()
         } else {
-            EmojiChooserInput.isPickingEmoji = false
-            unFocus()
-            
-            EmojiChooserInput.isPickingEmoji = true
-            focus()
+            DispatchQueue.main.async {
+                EmojiChooserInput.isPickingEmoji = false
+                self.unFocus()
+                
+                EmojiChooserInput.isPickingEmoji = true
+                self.focus()
+            }
         }
     }
     
