@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_emoji_picker/keyboard_emoji_picker.dart';
 import 'package:keyboard_emoji_picker/src/keyboard_emoji_picker_impl/method_call_name.dart';
@@ -10,6 +12,10 @@ class KeyboardEmojiPickerImpl implements KeyboardEmojiPicker {
 
   @override
   Future<String?> pickEmoji() async {
+    if (!checkIsPlatformSupported()) {
+      throw const NoEmojiKeyboardFound();
+    }
+
     final completer = Completer<String?>();
 
     _methodChannel.setMethodCallHandler(_createMethodCallHandler(completer));
@@ -22,7 +28,16 @@ class KeyboardEmojiPickerImpl implements KeyboardEmojiPicker {
   }
 
   @override
+  bool checkIsPlatformSupported() {
+    return !kIsWeb && Platform.isIOS;
+  }
+
+  @override
   Future<bool> checkHasEmojiKeyboard() async {
+    if (!checkIsPlatformSupported()) {
+      return false;
+    }
+
     final result = await _methodChannel.invokeMethod<bool>('hasEmojiKeyboard');
     return result ?? false;
   }

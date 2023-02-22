@@ -1,6 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+
+import 'keyboard_emoji_picker.dart';
 
 /// Makes it possible to open the native emoji keyboard on iOS.
 /// It is safe to use it on Android or other platforms for which
@@ -17,7 +17,8 @@ class KeyboardEmojiPickerWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!Platform.isIOS) {
+    final isSupported = KeyboardEmojiPicker().checkIsPlatformSupported();
+    if (!isSupported) {
       return child;
     }
 

@@ -46,10 +46,16 @@ abstract class KeyboardEmojiPicker {
   /// to pick an emoji using this method. See [checkHasEmojiKeyboard].
   Future<String?> pickEmoji();
 
+  /// Checks if the current platform is supported.
+  ///
+  /// Currently, only iOS is supported. Other platforms may be added in the future.
+  bool checkIsPlatformSupported();
+
   /// Returns whether the device has an emoji keyboard.
   ///
   /// If the device doesn't have an emoji keyboard, you can
-  /// show a custom emoji picker instead.
+  /// show a custom emoji picker instead or ask the user to enable
+  /// the emoji keyboard in the device's settings.
   Future<bool> checkHasEmojiKeyboard();
 
   /// Closes the emoji keyboard if it is open.
