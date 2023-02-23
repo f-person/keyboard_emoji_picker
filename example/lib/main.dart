@@ -15,6 +15,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String? _selectedEmoji;
   bool _hasKeyboard = false;
+  final _pickEmojiResults = <String?>[];
 
   @override
   void initState() {
@@ -31,19 +32,28 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Center(
           child: Column(children: [
+            // You can have it anywhere you want.
+            const KeyboardEmojiPickerWrapper(child: SizedBox.shrink()),
             const SizedBox(height: 16),
-            Text(
-              _selectedEmoji ??
-                  'No emoji selected yet.\nPress the button below to pick one!',
-              style: TextStyle(
-                fontSize: _selectedEmoji == null ? 16 : 64,
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 84),
+              child: Center(
+                child: Text(
+                  _selectedEmoji ??
+                      'No emoji selected yet.\nPress the button below to pick one!',
+                  style: TextStyle(
+                    fontSize: _selectedEmoji == null ? 16 : 64,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              textAlign: TextAlign.center,
             ),
             TextButton(
               onPressed: () async {
                 final emoji = await KeyboardEmojiPicker().pickEmoji();
+
                 setState(() {
+                  _pickEmojiResults.insert(0, emoji);
                   if (emoji != null) {
                     _selectedEmoji = emoji;
                   }
@@ -57,16 +67,19 @@ class _MyAppState extends State<MyApp> {
             ),
             const SizedBox(height: 16),
             Text('Has emoji keyboard: $_hasKeyboard'),
-            const KeyboardEmojiPickerWrapper(
-              child: SizedBox(),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Click me to lose focus',
-                ),
+            const Text('pickEmoji results:'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _pickEmojiResults.length,
+                itemBuilder: (context, index) {
+                  final result = _pickEmojiResults[index];
+
+                  return Text(
+                    result.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 40),
+                  );
+                },
               ),
             ),
           ]),
