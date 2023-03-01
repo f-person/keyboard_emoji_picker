@@ -17,8 +17,8 @@ import 'package:keyboard_emoji_picker/keyboard_emoji_picker.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-	// While this example wraps [MaterialApp], you don't have to.
-	// You can put it wherever you want to use the picker.
+    // While this example wraps [MaterialApp], you don't have to.
+    // You can put it wherever you want to use the picker.
     return KeyboardEmojiPickerWrapper(
       child: MaterialApp(
         title: 'My App',
