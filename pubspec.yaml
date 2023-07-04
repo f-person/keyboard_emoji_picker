@@ -1,6 +1,6 @@
 name: keyboard_emoji_picker
 description: Flutter plugin for picking emojis using device's keyboard.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/f-person/keyboard_emoji_picker
 repository: https://github.com/f-person/keyboard_emoji_picker
 

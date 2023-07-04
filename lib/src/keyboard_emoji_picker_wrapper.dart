@@ -24,14 +24,16 @@ class KeyboardEmojiPickerWrapper extends StatelessWidget {
 
     const viewType = 'fperson.dev/keyboard_emoji_picker';
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        const SizedBox.shrink(
-          child: UiKitView(viewType: viewType),
-        ),
-        child,
-      ],
+    return Directionality(
+      textDirection: Directionality.maybeOf(context) ?? TextDirection.ltr,
+      child: Stack(
+        children: [
+          const SizedBox.shrink(
+            child: UiKitView(viewType: viewType),
+          ),
+          child,
+        ],
+      ),
     );
   }
 }
